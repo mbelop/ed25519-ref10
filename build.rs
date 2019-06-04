@@ -15,6 +15,7 @@ fn main() {
             "src/fe.c",
             "src/ge.c",
             "src/keypair.c",
+            "src/pubkey.c",
             "src/open.c",
             "src/sc.c",
             "src/sign.c",
