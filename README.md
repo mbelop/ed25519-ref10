@@ -1,5 +1,6 @@
 # ed25519-ref10
-A minimalistic rust wrapper for the ref10 implementation of Ed25519 signatures by Daniel J. Bernstein.
+A minimalistic rust wrapper for the ref10 implementation of Ed25519 signatures by Daniel J. Bernstein
+extracted from the supercop-20190110 distribution.
 
 ## License
 This crate uses a public domain implementation of Ed25519 signature scheme by Daniel J. Bernstein.
