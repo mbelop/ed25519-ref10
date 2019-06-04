@@ -180,7 +180,7 @@ impl Keypair {
         unsafe {
             assert_eq!(
                 crypto_sign(
-                    &mut sm as *mut _ as *mut u8,
+                    sm.as_mut_slice() as *mut _ as *mut u8,
                     &mut smlen as *mut _ as *mut c_ulonglong,
                     message as *const _ as *const u8,
                     message.len() as c_ulonglong,
@@ -213,9 +213,9 @@ impl Keypair {
 
         unsafe {
             match crypto_sign_open(
-                &mut m as *mut _ as *mut u8,
+                m.as_mut_slice() as *mut _ as *mut u8,
                 &mut mlen as *mut _ as *mut c_ulonglong,
-                &sm as *const _ as *const u8,
+                sm.as_slice() as *const _ as *const u8,
                 smlen,
                 &pk as *const _ as *const u8,
             ) {
