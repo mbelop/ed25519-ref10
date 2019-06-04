@@ -292,6 +292,19 @@ pub enum SignatureError {
     VerifyError,
 }
 
+impl fmt::Display for SignatureError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match *self {
+            SignatureError::BytesLengthError { name: n, length: l } => {
+                write!(f, "{} must be {} bytes in length", n, l)
+            }
+            SignatureError::VerifyError => {
+                write!(f, "Verification equation was not satisfied")
+            }
+        }
+    }
+}
+
 extern "C" {
     fn crypto_sign(
         sm: *mut c_uchar,
