@@ -472,6 +472,11 @@ mod tests {
                 secret: SecretKey::from_bytes(&sk).unwrap(),
                 public: PublicKey::from_bytes(&pk).unwrap(),
             };
+            let expected_pubkey: PublicKey = (&keypair.secret).into();
+            assert_eq!(
+                &keypair.public.as_bytes()[..],
+                &expected_pubkey.as_bytes()[..]
+            );
 
             let expected = Signature::from_bytes(&sg).unwrap();
 
