@@ -31,6 +31,8 @@
 
 extern crate libc;
 
+use std::fmt;
+
 use libc::{c_int, c_uchar, c_ulonglong};
 
 pub const SECRET_KEY_LENGTH: usize = 32;
@@ -71,6 +73,12 @@ impl AsRef<[u8]> for SecretKey {
     }
 }
 
+impl fmt::Debug for SecretKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "SecretKey({:02x?})", &self.0[..])
+    }
+}
+
 #[derive(Default)]
 pub struct PublicKey(pub(crate) [u8; PUBLIC_KEY_LENGTH]);
 
@@ -104,6 +112,12 @@ impl AsRef<[u8]> for PublicKey {
     }
 }
 
+impl fmt::Debug for PublicKey {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "PublicKey({:02x?})", &self.0[..])
+    }
+}
+
 impl From<&SecretKey> for PublicKey {
     fn from(sk: &SecretKey) -> PublicKey {
         let mut pk: [u8; PUBLIC_KEY_LENGTH] = [0u8; PUBLIC_KEY_LENGTH];
@@ -121,7 +135,7 @@ impl From<&SecretKey> for PublicKey {
     }
 }
 
-#[derive(Default)]
+#[derive(Debug, Default)]
 pub struct Keypair {
     secret: SecretKey,
     public: PublicKey,
@@ -266,6 +280,13 @@ impl AsRef<[u8]> for Signature {
     }
 }
 
+impl fmt::Debug for Signature {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Signature({:02x?})", &self.0[..])
+    }
+}
+
+#[derive(Debug)]
 pub enum SignatureError {
     BytesLengthError { name: &'static str, length: usize },
     VerifyError,
