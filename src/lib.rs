@@ -198,7 +198,7 @@ impl Keypair {
     pub fn verify(
         &self,
         message: &[u8],
-        signature: Signature,
+        signature: &Signature,
     ) -> Result<(), SignatureError> {
         let mut m = vec![0u8; SIGNATURE_LENGTH + message.len()];
         let mut mlen: c_ulonglong = 0;
@@ -244,6 +244,19 @@ impl Signature {
     #[inline]
     pub fn as_bytes<'a>(&'a self) -> &'a [u8; SIGNATURE_LENGTH] {
         &self.0
+    }
+
+    pub fn from_bytes(bytes: &[u8]) -> Result<Signature, SignatureError> {
+        if bytes.len() != SIGNATURE_LENGTH {
+            return Err(SignatureError::BytesLengthError {
+                name: "Signature",
+                length: SIGNATURE_LENGTH,
+            });
+        }
+
+        let mut buf: [u8; SIGNATURE_LENGTH] = [0u8; SIGNATURE_LENGTH];
+        buf.copy_from_slice(bytes);
+        Ok(Signature(buf))
     }
 }
 
