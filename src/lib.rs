@@ -148,8 +148,8 @@ impl fmt::Debug for PublicKey {
     }
 }
 
-impl From<&SecretKey> for PublicKey {
-    fn from(sk: &SecretKey) -> PublicKey {
+impl<'a> From<&'a SecretKey> for PublicKey {
+    fn from(sk: &'a SecretKey) -> PublicKey {
         let mut pk: [u8; PUBLIC_KEY_LENGTH] = [0u8; PUBLIC_KEY_LENGTH];
 
         unsafe {
