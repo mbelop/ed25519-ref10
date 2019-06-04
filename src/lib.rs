@@ -106,6 +106,34 @@ impl PublicKey {
         buf.copy_from_slice(bytes);
         Ok(PublicKey(buf))
     }
+
+    pub fn verify(
+        &self,
+        message: &[u8],
+        signature: &Signature,
+    ) -> Result<(), SignatureError> {
+        let mut m = vec![0u8; SIGNATURE_LENGTH + message.len()];
+        let mut mlen: c_ulonglong = 0;
+
+        let mut sm = vec![0u8; SIGNATURE_LENGTH + message.len()];
+        let smlen: c_ulonglong = SIGNATURE_LENGTH as c_ulonglong +
+            message.len() as c_ulonglong;
+        sm[..SIGNATURE_LENGTH].copy_from_slice(signature.as_bytes());
+        sm[SIGNATURE_LENGTH..].copy_from_slice(message);
+
+        unsafe {
+            match crypto_sign_open(
+                m.as_mut_slice() as *mut _ as *mut u8,
+                &mut mlen as *mut _ as *mut c_ulonglong,
+                sm.as_slice() as *const _ as *const u8,
+                smlen,
+                self.as_bytes() as *const _ as *const u8,
+            ) {
+                0 => Ok(()),
+                _ => Err(SignatureError::VerifyError),
+            }
+        }
+    }
 }
 
 impl AsRef<[u8]> for PublicKey {
@@ -216,29 +244,7 @@ impl Keypair {
         message: &[u8],
         signature: &Signature,
     ) -> Result<(), SignatureError> {
-        let mut m = vec![0u8; SIGNATURE_LENGTH + message.len()];
-        let mut mlen: c_ulonglong = 0;
-
-        let mut sm = vec![0u8; SIGNATURE_LENGTH + message.len()];
-        let smlen: c_ulonglong = SIGNATURE_LENGTH as c_ulonglong +
-            message.len() as c_ulonglong;
-        sm[..SIGNATURE_LENGTH].copy_from_slice(signature.as_bytes());
-        sm[SIGNATURE_LENGTH..].copy_from_slice(message);
-
-        let pk = self.public.to_bytes();
-
-        unsafe {
-            match crypto_sign_open(
-                m.as_mut_slice() as *mut _ as *mut u8,
-                &mut mlen as *mut _ as *mut c_ulonglong,
-                sm.as_slice() as *const _ as *const u8,
-                smlen,
-                &pk as *const _ as *const u8,
-            ) {
-                0 => Ok(()),
-                _ => Err(SignatureError::VerifyError),
-            }
-        }
+        self.public.verify(message, signature)
     }
 }
 
