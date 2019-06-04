@@ -1,0 +1,17 @@
+[package]
+name = "ed25519-ref10"
+version = "0.1.0"
+authors = ["Mike Belopuhov <mike@belopuhov.com>"]
+license = "BSD-3-Clause"
+repository = "https://github.com/mbelop/ed25519-supercop"
+keywords = ["cryptography", "ed25519", "curve25519", "signature", "ECC"]
+categories = ["cryptography"]
+description = "Reference Ed25519 signature scheme implementation"
+
+build = "build.rs"
+
+[dependencies]
+libc = "0.2"
+
+[build-dependencies]
+cc = "1.0"
