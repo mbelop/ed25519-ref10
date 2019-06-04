@@ -1,7 +1,7 @@
 # ed25519-ref10
 A minimalistic rust wrapper for the ref10 implementation of Ed25519 signatures by Daniel J. Bernstein.
 
-# License
+## License
 This crate uses a public domain implementation of Ed25519 signature scheme by Daniel J. Bernstein.
 Minimal support code was written by Ted Unangst and placed in the public domain as well.
 The Rust shim is based on [ed25519-dalek](https://github.com/dalek-cryptography/ed25519-dalek)
