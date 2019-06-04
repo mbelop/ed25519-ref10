@@ -167,8 +167,8 @@ impl From<&SecretKey> for PublicKey {
 
 #[derive(Debug, Default)]
 pub struct Keypair {
-    secret: SecretKey,
-    public: PublicKey,
+    pub secret: SecretKey,
+    pub public: PublicKey,
 }
 
 impl Keypair {
